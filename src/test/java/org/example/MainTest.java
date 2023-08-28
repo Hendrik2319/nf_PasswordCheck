@@ -2,6 +2,13 @@ package org.example;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+
+import java.util.stream.Stream;
 
 class MainTest {
 
@@ -134,4 +141,56 @@ class MainTest {
         Assertions.assertTrue(actualIsNotABadPW     , String.format("Test: %s, Tested Password: \"%s\"", "BadPassword" , password));
         Assertions.assertTrue(actualHasSpecialChars , String.format("Test: %s, Tested Password: \"%s\"", "SpecialChars", password));
     }
+
+    static class StaticGeneratedPasswords implements ArgumentsProvider {
+        private static final String[] passwords = generate(5);
+
+        @SuppressWarnings("SameParameterValue")
+        private static String[] generate(int amount) {
+            String[] strs = new String[amount];
+            //strs[0] = "abcdef123";
+            for (int i=0; i<amount; i++)
+                strs[i] = Main.PasswordCheck.generatePassword();
+            return strs;
+        }
+
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
+            //System.out.printf( "StaticGeneratedPasswords.provideArguments( %s )%n", Arrays.toString(passwords) );
+            return Stream
+                    .of(passwords)
+                    .map(Arguments::of);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(StaticGeneratedPasswords.class)
+    void returnTrue_whenCheckLength_getsAGeneratedPassword(String password) {
+        Assertions.assertTrue(Main.PasswordCheck.    checkLength    (password));
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(StaticGeneratedPasswords.class)
+    void returnTrue_whenCheckNumbers_getsAGeneratedPassword(String password) {
+        Assertions.assertTrue(Main.PasswordCheck.    checkNumbers    (password));
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(StaticGeneratedPasswords.class)
+    void returnTrue_whenCheckCase_getsAGeneratedPassword(String password) {
+        Assertions.assertTrue(Main.PasswordCheck.    checkCase    (password));
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(StaticGeneratedPasswords.class)
+    void returnTrue_whenCheckBadPassword_getsAGeneratedPassword(String password) {
+        Assertions.assertTrue(Main.PasswordCheck.    checkBadPassword    (password));
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(StaticGeneratedPasswords.class)
+    void returnTrue_whenCheckSpecialChars_getsAGeneratedPassword(String password) {
+        Assertions.assertTrue(Main.PasswordCheck.    checkSpecialChars    (password));
+    }
+
 }
