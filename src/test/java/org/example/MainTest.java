@@ -8,7 +8,7 @@ class MainTest {
     @Test
     void returnFalse_whenCheckLength_getsATooShortPassword() {
         // given
-        String password = "#".repeat(Main.PasswordCheck.minLength-1);
+        String password = "#".repeat(Main.PasswordCheck.MIN_LENGTH -1);
         // when
         boolean actual = Main.PasswordCheck.checkLength(password);
         // then
@@ -17,7 +17,7 @@ class MainTest {
     @Test
     void returnTrue_whenCheckLength_getsALongEnoughPassword() {
         // given
-        String password = "#".repeat(Main.PasswordCheck.minLength);
+        String password = "#".repeat(Main.PasswordCheck.MIN_LENGTH);
         // when
         boolean actual = Main.PasswordCheck.checkLength(password);
         // then
@@ -71,7 +71,7 @@ class MainTest {
     @Test
     void returnFalse_whenCheckBadPW_getsABadPassword1() {
         // given
-        String password = Main.PasswordCheck.badPasswordList[0];
+        String password = Main.PasswordCheck.BAD_PASSWORD_LIST[0];
         // when
         boolean actual = Main.PasswordCheck.checkBadPassword(password);
         // then
@@ -105,16 +105,7 @@ class MainTest {
         Assertions.assertFalse(actual);
     }
     @Test
-    void returnFalse_whenCheckSpecialChars_getsAPasswordWithWrongSpecialChars() {
-        // given
-        String password = "abcde#";
-        // when
-        boolean actual = Main.PasswordCheck.checkSpecialChars(password);
-        // then
-        Assertions.assertFalse(actual);
-    }
-    @Test
-    void returnTrue_whenCheckSpecialChars_getsAPasswordWithAllowedSpecialChars() {
+    void returnTrue_whenCheckSpecialChars_getsAPasswordWithSpecialChars() {
         // given
         String password = "abcde(){}";
         // when
