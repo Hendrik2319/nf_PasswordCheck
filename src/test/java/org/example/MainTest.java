@@ -113,4 +113,25 @@ class MainTest {
         // then
         Assertions.assertTrue(actual);
     }
+    @Test
+    void returnAllTrue_whenAllChecks_appliedToGeneratedPasswords() {
+        for (int i=0; i<5; i++)
+            testGeneratedPassword(Main.PasswordCheck.generatePassword());
+    }
+    private void testGeneratedPassword(String password) {
+        // given
+        //   -> password
+        // when
+        boolean actualHasCorrectLength = Main.PasswordCheck.checkLength      (password);
+        boolean actualHasNumbers       = Main.PasswordCheck.checkNumbers     (password);
+        boolean actualHasCorrectCases  = Main.PasswordCheck.checkCase        (password);
+        boolean actualIsNotABadPW      = Main.PasswordCheck.checkBadPassword (password);
+        boolean actualHasSpecialChars  = Main.PasswordCheck.checkSpecialChars(password);
+        // then
+        Assertions.assertTrue(actualHasCorrectLength, String.format("Test: %s, Tested Password: \"%s\"", "Length"      , password));
+        Assertions.assertTrue(actualHasNumbers      , String.format("Test: %s, Tested Password: \"%s\"", "Numbers"     , password));
+        Assertions.assertTrue(actualHasCorrectCases , String.format("Test: %s, Tested Password: \"%s\"", "Case"        , password));
+        Assertions.assertTrue(actualIsNotABadPW     , String.format("Test: %s, Tested Password: \"%s\"", "BadPassword" , password));
+        Assertions.assertTrue(actualHasSpecialChars , String.format("Test: %s, Tested Password: \"%s\"", "SpecialChars", password));
+    }
 }
